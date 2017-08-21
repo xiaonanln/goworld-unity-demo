@@ -34,7 +34,7 @@ public abstract class ClientEntity : MonoBehaviour {
 	}
 
 	public void SyncEntityInfoToServer() {
-		Debug.Log ("sync yaw " + this.GetYaw ());
+		//Debug.Log ("sync yaw " + this.GetYaw ());
 		goworld.SyncEntityInfoToServer (this);
 	}
 

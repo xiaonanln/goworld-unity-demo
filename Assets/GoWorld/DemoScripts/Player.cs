@@ -6,9 +6,11 @@ using UnityEngine.SceneManagement;
 public class Player : ClientEntity {
 
 	Animator anim;
+	PlayerShooting playerShooting;
 
 	public override void OnCreated() {
 		anim = GetComponent<Animator> ();
+		playerShooting = GetComponent<PlayerShooting> ();
 		Debug.Log ("Player is created");
 	}
 
@@ -28,6 +30,10 @@ public class Player : ClientEntity {
 		Debug.Log (this.ToString() + "'s action is changed to " + action); 
 
 		anim.SetTrigger (action);
+	}
+
+	public void Shoot() {
+		playerShooting.Shoot ();
 	}
 
 }

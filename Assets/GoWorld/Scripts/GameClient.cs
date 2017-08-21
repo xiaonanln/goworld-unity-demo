@@ -116,7 +116,7 @@ public class GameClient : MonoBehaviour {
 			tcpClient.Client.Receive (recvPayloadLenBuff);
 			recvPayloadLen = BitConverter.ToUInt32 (recvPayloadLenBuff, 0);
 			recvState = RecvState.RecvPayload;
-			Debug.Log ("Packet payload length: " + recvPayloadLen);
+			//Debug.Log ("Packet payload length: " + recvPayloadLen);
 		}
 
 		// recvState == RecvState.RecvPayload
@@ -137,7 +137,7 @@ public class GameClient : MonoBehaviour {
 	void handlePacket(byte[] payload, int payloadLen) {
 		int readPos = 0;
 		UInt16 msgtype = readUint16 (payload, readPos, out readPos);
-		Debug.Log ("Received packet of size " + payloadLen + " msgtype=" + msgtype);
+		//Debug.Log ("Received packet of size " + payloadLen + " msgtype=" + msgtype);
 
 		if (msgtype != MT_CALL_FILTERED_CLIENTS && msgtype != MT_SYNC_POSITION_YAW_ON_CLIENTS) {
 			readUint16 (payload, readPos, out readPos);
@@ -290,7 +290,7 @@ public class GameClient : MonoBehaviour {
 	}
 
 	void handleSyncPositionYawOnClients(byte[] payload, int payloadLen, int readPos) {
-		Debug.Log ("handleSyncPositionYawOnClients: unread payload len: " + (payloadLen - readPos));
+		//Debug.Log ("handleSyncPositionYawOnClients: unread payload len: " + (payloadLen - readPos));
 		while (readPos < payloadLen) {
 			string entityID = readEntityID (payload, readPos, out readPos);
 			float x = readFloat32 (payload, readPos, out readPos);

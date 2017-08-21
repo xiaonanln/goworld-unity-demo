@@ -4,7 +4,7 @@ public class PlayerMovement : MonoBehaviour
 {
 	public float speed = 6f; 
 	Vector3 movement;
-	Animator anim;
+	//Animator anim;
 	Rigidbody playerRigidbody;
 	int floorMask;
 	float camRayLength = 100f;
@@ -15,7 +15,7 @@ public class PlayerMovement : MonoBehaviour
 
 	void Awake() {
 		floorMask = LayerMask.GetMask ("Floor");
-		anim = GetComponent<Animator> ();
+		//anim = GetComponent<Animator> ();
 		playerRigidbody = GetComponent<Rigidbody> ();
 		selfEntity = this.GetComponent<Player> ();
 	}
@@ -57,7 +57,7 @@ public class PlayerMovement : MonoBehaviour
 		bool walking = h != 0f || v != 0f;
 		if (!this.isWalking && walking) {
 			this.isWalking = walking;
-			selfEntity.CallServer ("SetAction", "walk");
+			selfEntity.CallServer ("SetAction", "move");
 		} else if (this.isWalking && !walking){
 			this.isWalking = walking;
 			selfEntity.CallServer("SetAction", "idle");

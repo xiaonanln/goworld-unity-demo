@@ -5,7 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class Monster : ClientEntity {
 
+	Animator anim;
+
 	public override void OnCreated() {
+		anim = GetComponent<Animator> ();
 		Debug.Log ("Monster is created");
 	}
 
@@ -15,4 +18,12 @@ public class Monster : ClientEntity {
 
 	public override void OnEnterSpace() {
 	}
+
+	public void OnAttrChange_action() {
+		string action = this.Attrs["action"] as string;
+		Debug.Log (this.ToString() + "'s action is changed to " + action); 
+
+		anim.SetTrigger (action);
+	}
+
 }

@@ -7,7 +7,8 @@ public class PlayerShooting : MonoBehaviour
     public float range = 100f;
 
 
-    float timer;
+	float shootDisplayTime;
+	float sendShootCD;
     Ray shootRay = new Ray();
     RaycastHit shootHit;
     int shootableMask;
@@ -34,19 +35,19 @@ public class PlayerShooting : MonoBehaviour
 		self = GetComponent<Player> ();
     }
 
-
     void Update ()
     {
 		if (self.IsPlayer) {
-			timer += Time.deltaTime;
+			sendShootCD += Time.deltaTime;
 
-			if(Input.GetButton ("Fire1") && timer >= timeBetweenBullets && Time.timeScale != 0)
+			if(Input.GetButton ("Fire1") && sendShootCD >= timeBetweenBullets && Time.timeScale != 0)
 			{
-				Shoot ();
+				sendShootCD = 0;
+				SendShoot ();
 			}
 		}
 
-        if(timer >= timeBetweenBullets * effectsDisplayTime)
+		if(Time.time >= shootDisplayTime + timeBetweenBullets * effectsDisplayTime)
         {
             DisableEffects ();
         }
@@ -59,10 +60,29 @@ public class PlayerShooting : MonoBehaviour
         gunLight.enabled = false;
     }
 
+	void SendShoot ()
+	{
+		shootRay.origin = gunBarrelEnd.transform.position;
+		shootRay.direction = transform.forward;
 
-    void Shoot ()
+		if(Physics.Raycast (shootRay, out shootHit, range, shootableMask))
+		{
+			ClientEntity enemyEntity = shootHit.collider.GetComponent <ClientEntity> ();
+			if (enemyEntity != null) {
+				self.CallServer ("ShootHit", enemyEntity.ID);
+			} else {
+				self.CallServer ("ShootMiss");
+			}
+		}
+		else
+		{
+			self.CallServer ("ShootMiss");
+		}
+	}
+
+    internal void Shoot ()
     {
-        timer = 0f;
+		shootDisplayTime = Time.time;
 
         gunAudio.Play ();
 
@@ -79,12 +99,6 @@ public class PlayerShooting : MonoBehaviour
 
         if(Physics.Raycast (shootRay, out shootHit, range, shootableMask))
         {
-			MonsterHealth enemyHealth = shootHit.collider.GetComponent <MonsterHealth> ();
-            if(enemyHealth != null)
-            {
-				Debug.Log ("Hit enemy!!!");
-                enemyHealth.TakeDamage (damagePerShot, shootHit.point);
-            }
             gunLine.SetPosition (1, shootHit.point);
         }
         else
