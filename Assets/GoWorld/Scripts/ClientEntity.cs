@@ -56,8 +56,11 @@ public abstract class ClientEntity : MonoBehaviour {
     {
         Hashtable t = this.getAttrByPath(path) as Hashtable;
         t[key] = val;
-        string rootkey = path.Count > 0 ? (string)path[0] : key;
-        this.GetType().GetMethod("OnAttrChange_" + rootkey).Invoke(this, new object[0]);
+		string rootkey = path != null && path.Count > 0 ? (string)path[0] : key;
+		System.Reflection.MethodInfo callback = this.GetType ().GetMethod ("OnAttrChange_" + rootkey);
+		if (callback != null) {
+			callback.Invoke (this, new object[0]);
+		}
     }
 
     internal void OnMapAttrDel(ArrayList path, string key)
@@ -67,37 +70,53 @@ public abstract class ClientEntity : MonoBehaviour {
         {
             t.Remove(key);
         }
-        string rootkey = path.Count > 0 ? (string)path[0] : key;
-        this.GetType().GetMethod("OnAttrChange_" + rootkey).Invoke(this, new object[0]);
+		string rootkey = path != null && path.Count > 0 ? (string)path[0] : key;
+		System.Reflection.MethodInfo callback = this.GetType ().GetMethod ("OnAttrChange_" + rootkey);
+		if (callback != null) {
+			callback.Invoke (this, new object[0]);
+		}
     }
 
     internal void OnListAttrAppend(ArrayList path, object val)
     {
         ArrayList l = getAttrByPath(path) as ArrayList;
         l.Add(val);
-        string rootkey = (string)path[0];
-        this.GetType().GetMethod("OnAttrChange_" + rootkey).Invoke(this, new object[0]);
+		string rootkey = (string)path[0];
+		System.Reflection.MethodInfo callback = this.GetType ().GetMethod ("OnAttrChange_" + rootkey);
+		if (callback != null) {
+			callback.Invoke (this, new object[0]);
+		}
     }
 
     internal void OnListAttrPop(ArrayList path)
     {
         ArrayList l = getAttrByPath(path) as ArrayList;
         l.RemoveAt(l.Count - 1);
-        string rootkey = (string)path[0];
-        this.GetType().GetMethod("OnAttrChange_" + rootkey).Invoke(this, new object[0]);
+		string rootkey = (string)path[0];
+		System.Reflection.MethodInfo callback = this.GetType ().GetMethod ("OnAttrChange_" + rootkey);
+		if (callback != null) {
+			callback.Invoke (this, new object[0]);
+		}
     }
 
     internal void OnListAttrChange(ArrayList path, int index, object val)
     {
         ArrayList l = getAttrByPath(path) as ArrayList;
         l[index] = val;
-        string rootkey = (string)path[0];
-        this.GetType().GetMethod("OnAttrChange_" + rootkey).Invoke(this, new object[0]);
+		string rootkey = (string)path[0];
+		System.Reflection.MethodInfo callback = this.GetType ().GetMethod ("OnAttrChange_" + rootkey);
+		if (callback != null) {
+			callback.Invoke (this, new object[0]);
+		}
     }
 
     internal object getAttrByPath(ArrayList path)
     {
         object attr = this.Attrs;
+
+		if (path == null) {
+			return attr; 
+		}
 
         foreach (object key in path)
         {
@@ -111,6 +130,7 @@ public abstract class ClientEntity : MonoBehaviour {
             }
         }
 
+        Debug.Log("getAttrByPath: " + path.ToString() + " = " + attr);
         return attr;
     }
 
