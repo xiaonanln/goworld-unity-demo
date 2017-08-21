@@ -19,4 +19,5 @@ public class Player : ClientEntity {
 		}
 		this.GetComponent<PlayerMovement> ().enabled = this.IsPlayer;
 	}
+
 }

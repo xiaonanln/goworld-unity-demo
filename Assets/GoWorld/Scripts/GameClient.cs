@@ -337,7 +337,7 @@ public class GameClient : MonoBehaviour {
 
 	void handleNotifyMapAttrChangeOnClient(byte[] payload, int readPos) {
 		string entityID = readEntityID (payload, readPos, out readPos);
-		object path = readData (payload, readPos, out readPos);
+        ArrayList path = readData (payload, readPos, out readPos) as ArrayList;
 		string key = readVarStr (payload, readPos, out readPos);
 		object val = readData (payload, readPos, out readPos);
 		manager.OnMapAttrChange (entityID, path, key, val);
@@ -345,25 +345,26 @@ public class GameClient : MonoBehaviour {
 
 	void handleNotifyMapAttrDelOnClient(byte[] payload, int readPos) {
 		string entityID = readEntityID (payload, readPos, out readPos);
-		object path = readData (payload, readPos, out readPos);
+        ArrayList path = readData (payload, readPos, out readPos) as ArrayList;
 		string key = readVarStr (payload, readPos, out readPos);
 		manager.OnMapAttrDel (entityID, path, key);
 	}
 
 	void handleNotifyListAttrAppendOnClient(byte[] payload, int readPos) {
 		string entityID = readEntityID (payload, readPos, out readPos);
-		object path = readData (payload, readPos, out readPos);
+        ArrayList path = readData (payload, readPos, out readPos) as ArrayList;
 		object val = readData (payload, readPos, out readPos);
 		manager.OnListAttrAppend (entityID, path, val);
 	}
+
 	void handleNotifyListAttrPopOnClient(byte[] payload, int readPos) {
 		string entityID = readEntityID (payload, readPos, out readPos);
-		object path = readData (payload, readPos, out readPos);
+        ArrayList path = readData (payload, readPos, out readPos) as ArrayList;
 		manager.OnListAttrPop (entityID, path);
 	}
 	void handleNotifyListAttrChangeOnClient(byte[] payload, int readPos) {
 		string entityID = readEntityID (payload, readPos, out readPos);
-		object path = readData (payload, readPos, out readPos);
+        ArrayList path = readData (payload, readPos, out readPos) as ArrayList;
 		int index = (int)readUint32(payload, readPos, out readPos);
 		object val = readData (payload, readPos, out readPos);
 		manager.OnListAttrChange (entityID, path, index, val);

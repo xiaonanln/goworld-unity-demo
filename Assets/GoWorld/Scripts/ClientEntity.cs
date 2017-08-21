@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -50,6 +51,68 @@ public abstract class ClientEntity : MonoBehaviour {
 	public void SetYaw(float yaw) {
 		this.transform.rotation = Quaternion.Euler (new Vector3 (0f, yaw, 0f));
 	}
+
+    internal void OnMapAttrChange(ArrayList path, string key, object val)
+    {
+        Hashtable t = this.getAttrByPath(path) as Hashtable;
+        t[key] = val;
+        string rootkey = path.Count > 0 ? (string)path[0] : key;
+        this.GetType().GetMethod("OnAttrChange_" + rootkey).Invoke(this, new object[0]);
+    }
+
+    internal void OnMapAttrDel(ArrayList path, string key)
+    {
+        Hashtable t = this.getAttrByPath(path) as Hashtable;
+        if (t.ContainsKey(key))
+        {
+            t.Remove(key);
+        }
+        string rootkey = path.Count > 0 ? (string)path[0] : key;
+        this.GetType().GetMethod("OnAttrChange_" + rootkey).Invoke(this, new object[0]);
+    }
+
+    internal void OnListAttrAppend(ArrayList path, object val)
+    {
+        ArrayList l = getAttrByPath(path) as ArrayList;
+        l.Add(val);
+        string rootkey = (string)path[0];
+        this.GetType().GetMethod("OnAttrChange_" + rootkey).Invoke(this, new object[0]);
+    }
+
+    internal void OnListAttrPop(ArrayList path)
+    {
+        ArrayList l = getAttrByPath(path) as ArrayList;
+        l.RemoveAt(l.Count - 1);
+        string rootkey = (string)path[0];
+        this.GetType().GetMethod("OnAttrChange_" + rootkey).Invoke(this, new object[0]);
+    }
+
+    internal void OnListAttrChange(ArrayList path, int index, object val)
+    {
+        ArrayList l = getAttrByPath(path) as ArrayList;
+        l[index] = val;
+        string rootkey = (string)path[0];
+        this.GetType().GetMethod("OnAttrChange_" + rootkey).Invoke(this, new object[0]);
+    }
+
+    internal object getAttrByPath(ArrayList path)
+    {
+        object attr = this.Attrs;
+
+        foreach (object key in path)
+        {
+            if (key.GetType() == typeof(string))
+            {
+                attr = (attr as Hashtable)[(string)key];
+            }
+            else
+            {
+                attr = (attr as ArrayList)[(int)key];
+            }
+        }
+
+        return attr;
+    }
 
 }
 

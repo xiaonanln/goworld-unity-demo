@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -179,4 +180,64 @@ public class GoWorldManager : MonoBehaviour {
 			this.player.OnEnterSpace ();
 		}
 	}
+
+    internal void OnMapAttrChange(string entityID, ArrayList path, string key, object val)
+    {
+        ClientEntity entity;
+        if (!this.entities.TryGetValue(entityID, out entity))
+        {
+            Debug.Log("OnMapAttrChange: Entity " + entityID + " is not found");
+            return;
+        }
+
+        entity.OnMapAttrChange(path, key, val);
+    }
+
+    internal void OnMapAttrDel(string entityID, ArrayList path, string key)
+    {
+        ClientEntity entity;
+        if (!this.entities.TryGetValue(entityID, out entity))
+        {
+            Debug.Log("OnMapAttrDel: Entity " + entityID + " is not found");
+            return;
+        }
+
+        entity.OnMapAttrDel(path, key);
+    }
+
+    internal void OnListAttrAppend(string entityID, ArrayList path, object val)
+    {
+        ClientEntity entity;
+        if (!this.entities.TryGetValue(entityID, out entity))
+        {
+            Debug.Log("OnListAttrAppend: Entity " + entityID + " is not found");
+            return;
+        }
+
+        entity.OnListAttrAppend(path, val);
+    }
+
+    internal void OnListAttrPop(string entityID, ArrayList path)
+    {
+        ClientEntity entity;
+        if (!this.entities.TryGetValue(entityID, out entity))
+        {
+            Debug.Log("OnListAttrPop: Entity " + entityID + " is not found");
+            return;
+        }
+
+        entity.OnListAttrPop(path);
+    }
+
+    internal void OnListAttrChange(string entityID, ArrayList path, int index, object val)
+    {
+        ClientEntity entity;
+        if (!this.entities.TryGetValue(entityID, out entity))
+        {
+            Debug.Log("OnListAttrChange: Entity " + entityID + " is not found");
+            return;
+        }
+
+        entity.OnListAttrChange(path, index, val);
+    }
 }
