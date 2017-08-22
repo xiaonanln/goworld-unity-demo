@@ -134,5 +134,16 @@ public abstract class ClientEntity : MonoBehaviour {
         return attr;
     }
 
+	public Int64 GetInt(string key) {
+		object v = this.Attrs [key];
+		if (v.GetType () == typeof(byte)) {
+			return (Int64)(byte)(v);
+		} else if (v.GetType () == typeof(int)) {
+			return (Int64)(int)(v);
+		} else {
+			return (Int64)(int)(v);
+		}
+	}
+
 }
 

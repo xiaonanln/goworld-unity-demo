@@ -37,7 +37,7 @@ public class PlayerShooting : MonoBehaviour
 
     void Update ()
     {
-		if (self.IsPlayer) {
+		if (self.IsPlayer && self.GetInt("hp") > 0) {
 			sendShootCD += Time.deltaTime;
 
 			if(Input.GetButton ("Fire1") && sendShootCD >= timeBetweenBullets && Time.timeScale != 0)

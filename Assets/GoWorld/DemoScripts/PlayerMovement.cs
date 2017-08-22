@@ -24,6 +24,10 @@ public class PlayerMovement : MonoBehaviour
 		float h = Input.GetAxisRaw ("Horizontal");
 		float v = Input.GetAxisRaw ("Vertical");
 
+		if (selfEntity.GetInt("hp") <= 0) {
+			return;
+		}
+
 		Move (h, v);
 		Turning();
 		ChangeAction(h, v);
