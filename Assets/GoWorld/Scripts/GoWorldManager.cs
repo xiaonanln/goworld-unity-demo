@@ -28,12 +28,11 @@ class entityCreationInfo {
 
 public class GoWorldManager : MonoBehaviour {
 	public ClientEntity[] entityList;
-	GameClient gameClient;
-	ClientEntity player;
-	System.Collections.Generic.Dictionary<string, ClientEntity> entities;
-	SpaceInfo space = new SpaceInfo(); // nil space
-	IList<entityCreationInfo> entityCreationQueue = new List<entityCreationInfo>();
-
+	internal GameClient gameClient;
+	internal ClientEntity player;
+	internal System.Collections.Generic.Dictionary<string, ClientEntity> entities;
+	internal 	SpaceInfo space = new SpaceInfo(); // nil space
+	internal IList<entityCreationInfo> entityCreationQueue = new List<entityCreationInfo>();
 
 	// Use this for initialization
 	void Awake () {
@@ -44,6 +43,10 @@ public class GoWorldManager : MonoBehaviour {
 		Debug.Log ("GameClient: " + gameClient);
 		GameObject.DontDestroyOnLoad (this.gameObject);
 		SceneManager.sceneLoaded += this.onSceneLoaded;
+	}
+
+	public ClientEntity GetEntity(string id) {
+		return this.entities [id];
 	}
 
 	public void OnSyncEntityInfo(string entityID, float x, float y, float z, float yaw) {
