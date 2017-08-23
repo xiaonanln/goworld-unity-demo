@@ -16,6 +16,10 @@ public abstract class ClientEntity : MonoBehaviour {
 	[HideInInspector]
 	public Hashtable Attrs;
 
+	internal float targetYaw;
+	internal Vector3 targetPos;
+	internal float targetTime;
+
 	public virtual void Init(GoWorldManager goworld, string entityID, bool isPlayer, float x, float y, float z, float yaw, Hashtable attrs) {
 		this.goworld = goworld;
 		this.ID = entityID;
@@ -23,6 +27,10 @@ public abstract class ClientEntity : MonoBehaviour {
 		this.transform.position = new Vector3 (x, y, z);
 		this.SetYaw (yaw);
 		this.Attrs = attrs;
+	}
+
+	public override string ToString() {
+		return this.GetType ().Name + "<" + this.ID + ">";
 	}
 
 	public virtual void OnCreated () {}
@@ -38,10 +46,33 @@ public abstract class ClientEntity : MonoBehaviour {
 		goworld.SyncEntityInfoToServer (this);
 	}
 
-	public void OnSyncEntityInfo(string entityID, float x, float y, float z, float yaw) {
-		GameObject obj = this.gameObject;
-		obj.transform.position = new Vector3 (x, y, z);
-		this.SetYaw (yaw);
+	internal void OnSyncEntityInfo(string entityID, float x, float y, float z, float yaw) {
+		this.targetTime = Time.time + 0.11f;
+		//Debug.LogWarning (this.ToString() + "OnSyncEntityInfo: " + x + "," + y + "," + z + " targetTime="+targetTime);
+		this.targetPos = new Vector3 (x, y, z);
+		this.targetYaw = yaw;
+	}
+
+	protected virtual void Update() {
+		if (this.targetTime > 0) {
+			float now = Time.time;
+			//Debug.LogWarning(this.ToString() + "Update: now="+now + " targetTime="+this.targetTime);
+			if (now < this.targetTime) {
+				Vector3 distance = this.targetPos - transform.position;
+				float leftTime = this.targetTime - now;
+				float curyaw = this.GetYaw ();
+				float distyaw = this.targetYaw - curyaw;
+				float dt = Time.deltaTime;
+				float rate = dt / (dt + leftTime);
+				transform.position += distance * rate;
+				SetYaw (curyaw + distyaw * rate);
+				//Debug.LogWarning ("Distance: " + distance + " rate: " + rate);
+			} else {
+				transform.position = this.targetPos;
+				SetYaw (this.targetYaw);
+				this.targetTime = 0;
+			}
+		}
 	}
 
 	public float GetYaw() {

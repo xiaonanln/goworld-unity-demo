@@ -42,7 +42,8 @@ public class Monster : ClientEntity {
 		attackTime = Time.time;
 	}
 
-	public void Update() {
+	protected override void Update() {
+		base.Update ();
 		if (Time.time >= attackTime + 0.2f) {
 			lineRenderer.enabled = false;
 		}
