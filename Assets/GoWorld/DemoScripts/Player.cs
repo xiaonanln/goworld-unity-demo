@@ -23,6 +23,9 @@ public class Player : ClientEntity {
 			GameObject.Find ("Main Camera").GetComponent<CameraFollow> ().target = this.gameObject.transform;
 		}
 		this.GetComponent<PlayerMovement> ().enabled = this.IsPlayer;
+
+		string action = this.Attrs["action"] as string;
+		anim.SetTrigger (action);
 	}
 
 	public void OnAttrChange_action() {

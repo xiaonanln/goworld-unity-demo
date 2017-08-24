@@ -179,8 +179,8 @@ public class GoWorldManager : MonoBehaviour {
 			createEntity (ci.typeName, ci.entityID, ci.isPlayer, ci.x, ci.y, ci.z, ci.yaw, ci.attrs);
 		}
 
-		if (this.player) {
-			this.player.OnEnterSpace ();
+		foreach (ClientEntity entity in this.entities.Values) {
+			entity.OnEnterSpace ();
 		}
 	}
 

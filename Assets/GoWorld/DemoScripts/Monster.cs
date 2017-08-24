@@ -20,6 +20,8 @@ public class Monster : ClientEntity {
 	}
 
 	public override void OnEnterSpace() {
+		string action = this.Attrs["action"] as string;
+		anim.SetTrigger (action);
 	}
 
 	public void OnAttrChange_action() {
