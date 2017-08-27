@@ -37,7 +37,7 @@ public class GoWorldManager : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
 		Debug.Log ("GoWorldManager is awake ...");
-		this.gameObject.AddComponent<GameClient> ();
+		//this.gameObject.AddComponent<GameClient> ();
 		gameClient = GetComponent<GameClient> ();
 		this.entities = new System.Collections.Generic.Dictionary<string, ClientEntity> ();
 		Debug.Log ("GameClient: " + gameClient);
