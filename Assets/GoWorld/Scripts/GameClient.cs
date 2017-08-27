@@ -60,6 +60,10 @@ public class GameClient : MonoBehaviour {
 
 	const UInt16 MT_GATE_SERVICE_MSG_TYPE_STOP = 2000;
 
+    public string gateIP = "127.0.0.1";
+    public int gatePort = 15011;
+
+
 	GoWorldManager manager;
 	bool connecting;
 	TcpClient tcpClient;
@@ -98,7 +102,7 @@ public class GameClient : MonoBehaviour {
 		if (!tcpClient.Connected && !connecting) {
 			Debug.Log ("Connecting to server ...");
 			connecting = true;
-			tcpClient.BeginConnect ("localhost", 15011, onConnected, 0);
+			tcpClient.BeginConnect (gateIP, gatePort, onConnected, 0);
 			return;
 		}
 
