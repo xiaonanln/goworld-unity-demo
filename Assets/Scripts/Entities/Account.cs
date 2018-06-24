@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Account : ClientEntity {
+public class Account : GoWorldUnity3D.ClientEntity{
 
 	Login login;
 
-	public override void OnCreated() {
+    protected override void OnCreated() {
 		//this.CallServer ("Login", "100");
 		if (SceneManager.GetActiveScene ().name != "Login") {
 			SceneManager.LoadScene ("Login");
@@ -17,7 +17,7 @@ public class Account : ClientEntity {
 		login = GameObject.Find("Login").GetComponent<Login>();
 	}
 
-	public override void OnDestroy() {
+	protected override void OnDestroy() {
 		Debug.Log("Account is destroyed");
 	}
 
@@ -28,4 +28,23 @@ public class Account : ClientEntity {
 	public void ShowError(string msg) {
 		login.showMessage (msg);
 	}
+
+    protected override void OnBecomeClientOwner()
+    {
+        login.showMessage("Ready To Register / Login");
+    }
+
+    protected override void OnEnterSpace()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    protected override void OnLeaveSpace()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    void Update()
+    {
+    }
 }

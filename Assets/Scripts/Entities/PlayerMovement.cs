@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using GoWorldUnity3D;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -8,23 +9,20 @@ public class PlayerMovement : MonoBehaviour
 	Rigidbody playerRigidbody;
 	int floorMask;
 	float camRayLength = 100f;
-	float syncEntityInfoAccumTime = 0;
-	Player selfEntity;
 	bool isWalking;
 
 
-	void Awake() {
+	void Start() {
 		floorMask = LayerMask.GetMask ("Floor");
 		//anim = GetComponent<Animator> ();
 		playerRigidbody = GetComponent<Rigidbody> ();
-		selfEntity = this.GetComponent<Player> ();
 	}
 
 	void FixedUpdate() {
 		float h = Input.GetAxisRaw ("Horizontal");
 		float v = Input.GetAxisRaw ("Vertical");
 
-		if (selfEntity.GetInt("hp") <= 0) {
+        if (GetComponent<ClientEntity>().Attrs.GetInt("hp") <= 0) {
 			return;
 		}
 
@@ -37,13 +35,6 @@ public class PlayerMovement : MonoBehaviour
 		movement.Set (h, 0f, v);
 		movement = movement.normalized * speed * Time.fixedDeltaTime;
 		playerRigidbody.MovePosition (transform.position + movement);
-
-		syncEntityInfoAccumTime += Time.fixedDeltaTime;
-		if (syncEntityInfoAccumTime > 0.1) {
-			syncEntityInfoAccumTime = 0;
-			//Debug.Log ("Move Syncing to server");
-			selfEntity.SyncEntityInfoToServer ();
-		}
 	}
 
 	void Turning() {
@@ -61,10 +52,10 @@ public class PlayerMovement : MonoBehaviour
 		bool walking = h != 0f || v != 0f;
 		if (!this.isWalking && walking) {
 			this.isWalking = walking;
-			selfEntity.CallServer ("SetAction", "move");
+            GetComponent<ClientEntity>().CallServer ("SetAction", "move");
 		} else if (this.isWalking && !walking){
 			this.isWalking = walking;
-			selfEntity.CallServer("SetAction", "idle");
+            GetComponent<ClientEntity>().CallServer("SetAction", "idle");
 		}
 	}
 }

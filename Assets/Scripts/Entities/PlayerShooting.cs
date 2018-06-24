@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using GoWorldUnity3D;
 
 public class PlayerShooting : MonoBehaviour
 {
@@ -17,7 +18,6 @@ public class PlayerShooting : MonoBehaviour
     AudioSource gunAudio;
     Light gunLight;
     float effectsDisplayTime = 0.2f;
-	ClientEntity self;
 	GameObject gunBarrelEnd;
 
 
@@ -31,13 +31,11 @@ public class PlayerShooting : MonoBehaviour
 		gunLine = gunBarrelEnd.GetComponent <LineRenderer> ();
 		gunAudio = gunBarrelEnd.GetComponent<AudioSource> ();
 		gunLight = gunBarrelEnd.GetComponent<Light> ();
-
-		self = GetComponent<Player> ();
     }
 
     void Update ()
     {
-		if (self.IsPlayer && self.GetInt("hp") > 0) {
+		if (GetComponent<ClientEntity>().IsClientOwner && GetComponent<ClientEntity>().Attrs.GetInt("hp") > 0) {
 			sendShootCD += Time.deltaTime;
 
 			if(Input.GetButton ("Fire1") && sendShootCD >= timeBetweenBullets && Time.timeScale != 0)
@@ -69,14 +67,14 @@ public class PlayerShooting : MonoBehaviour
 		{
 			ClientEntity enemyEntity = shootHit.collider.GetComponent <ClientEntity> ();
 			if (enemyEntity != null) {
-				self.CallServer ("ShootHit", enemyEntity.ID);
+                GetComponent<ClientEntity>().CallServer ("ShootHit", enemyEntity.ID);
 			} else {
-				self.CallServer ("ShootMiss");
+                GetComponent<ClientEntity>().CallServer ("ShootMiss");
 			}
 		}
 		else
 		{
-			self.CallServer ("ShootMiss");
+            GetComponent<ClientEntity>().CallServer ("ShootMiss");
 		}
 	}
 
