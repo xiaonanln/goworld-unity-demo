@@ -44,7 +44,7 @@ namespace GoWorldUnity3D
             GameObject gameObject = createGameObjectMethod.Invoke(null, new object[1] { attrs }) as GameObject;
             if (gameObject == null)
             {
-                GoWorldLogger.Error("EntityManager", "Fail To Create GameObject For Entity Type {0}: gameObject == null", typeName);
+                GoWorldLogger.Error("EntityManager", "Fail To Create GameObject For Entity Type {0}, Please Define New CreateGameObject Method Like: public static new GameObject CreateGameObject(MapAttr attrs) { ... }", typeName);
                 return null;
             }
 
