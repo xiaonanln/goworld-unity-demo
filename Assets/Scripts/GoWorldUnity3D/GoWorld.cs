@@ -31,8 +31,7 @@ namespace GoWorldUnity3D
         {
             GameClient.OnCreateEntityOnClient += OnCreateEntityOnClient;
             GameClient.OnCallEntityMethodOnClient += OnCallEntityMethodOnClient;
-            GameObject clientSpace = new GameObject("ClientSpace", typeof(ClientSpace));
-            RegisterEntity(clientSpace);
+            RegisterEntity(typeof(ClientSpace));
         }
 
         public static void Update()
@@ -41,9 +40,9 @@ namespace GoWorldUnity3D
             EntityManager.Update();
         }
 
-        public static void RegisterEntity(UnityEngine.GameObject gameObject)
+        public static void RegisterEntity(Type entityType)
         {
-            EntityManager.RegisterEntity(gameObject);
+            EntityManager.RegisterEntity(entityType);
         }
 
         public static ClientEntity GetEntity(string entityID)

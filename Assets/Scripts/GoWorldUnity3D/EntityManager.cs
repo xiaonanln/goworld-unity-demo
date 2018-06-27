@@ -15,7 +15,8 @@ namespace GoWorldUnity3D
         const string SPACE_ENTITY_NAME = "__space__";
 
         Dictionary<string, ClientEntity> entities = new Dictionary<string, ClientEntity>();
-        Dictionary<string, GameObject> entityGameObjects = new Dictionary<string, GameObject>();
+        //Dictionary<string, List<GameObject> > entityGameObjects = new Dictionary<string, List<GameObject>>();
+        Dictionary<string, Type> entityTypes = new Dictionary<string, Type>();
         public ClientEntity ClientOwner;
         public ClientSpace Space;
 
@@ -26,7 +27,7 @@ namespace GoWorldUnity3D
                 typeName = "ClientSpace";
             }
 
-            GoWorldLogger.Assert(this.entityGameObjects.ContainsKey(typeName));
+            GoWorldLogger.Assert(this.entityTypes.ContainsKey(typeName), "Entity Type {0} Not Found", typeName);
 
             if (this.entities.ContainsKey(entityID))
             {
@@ -36,11 +37,27 @@ namespace GoWorldUnity3D
             }
 
             // create new Game Object of specified type 
-            GameObject gameObjectPrefab = this.entityGameObjects[typeName];
-            GameObject gameObject = GameObject.Instantiate(gameObjectPrefab);
-            GameObject.DontDestroyOnLoad(gameObject);
+            Type entityType = this.entityTypes[typeName];
+            System.Reflection.MethodInfo createGameObjectMethod = entityType.GetMethod("CreateGameObject");
+            GoWorldLogger.Assert(createGameObjectMethod != null, "CreateGameObject Method Not Found For Entity Type {0}", typeName);
+
+            GameObject gameObject = createGameObjectMethod.Invoke(null, new object[1] { attrs }) as GameObject;
+            if (gameObject == null)
+            {
+                GoWorldLogger.Error("EntityManager", "Fail To Create GameObject For Entity Type {0}: gameObject == null", typeName);
+                return null;
+            }
+
             ClientEntity e = gameObject.GetComponent<ClientEntity>();
-            GoWorldLogger.Assert(e.GetType().Name == typeName);
+            if (e == null || e.GetType().Name != typeName)
+            {
+                // GameObject created, but wrong entity type
+                GameObject.Destroy(gameObject);
+                GoWorldLogger.Error("EntityManager", "Fail To Create GameObject For Entity Type {0}: wrong entity type {1}", typeName, e.GetType().Name);
+                return null;
+            }
+
+            GameObject.DontDestroyOnLoad(gameObject);
             e.init(entityID, isClientOwner, x, y, z, yaw, attrs);
             this.entities[entityID] = e;
             e.onCreated();
@@ -141,16 +158,16 @@ namespace GoWorldUnity3D
             }
         }
 
-        internal void RegisterEntity(GameObject gameObject)
+        internal void RegisterEntity(Type entityType)
         {
-            ClientEntity entity = gameObject.GetComponent<ClientEntity>();
-            UnityEngine.Debug.Assert(entity != null);
-            // Debug.Assert(entityType.IsSubclassOf(typeof(ClientEntity)));
-            Type entityType = entity.GetType();
+            //ClientEntity entity = gameObject.GetComponent<ClientEntity>();
+            //UnityEngine.Debug.Assert(entity != null);
+            GoWorldLogger.Assert(entityType.IsSubclassOf(typeof(ClientEntity)));
+            //Type entityType = entity.GetType();
 
             string entityTypeName = entityType.Name;
-            GoWorldLogger.Assert(!this.entityGameObjects.ContainsKey(entityTypeName));
-            this.entityGameObjects[entityTypeName] = gameObject;
+            GoWorldLogger.Assert(!this.entityTypes.ContainsKey(entityTypeName));
+            this.entityTypes[entityTypeName] = entityType;
         }
 
         internal void CallEntity(string entityID, string method, object[] args)

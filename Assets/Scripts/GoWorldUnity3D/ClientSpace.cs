@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace GoWorldUnity3D
 {
@@ -31,5 +32,9 @@ namespace GoWorldUnity3D
             throw new NotImplementedException();
         }
 
+        public static new GameObject CreateGameObject(MapAttr attrs)
+        {
+            return new GameObject("ClientSpace", typeof(ClientSpace));
+        }
     }
 }

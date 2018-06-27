@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using GoWorldUnity3D;
 
 public class Account : GoWorldUnity3D.ClientEntity{
 
@@ -46,5 +47,10 @@ public class Account : GoWorldUnity3D.ClientEntity{
 
     void Update()
     {
+    }
+
+    public static new GameObject CreateGameObject(MapAttr attrs)
+    {
+        return GameObject.Instantiate(GameObject.Find("GoWorldController").GetComponent<GoWorldController>().Account);
     }
 }

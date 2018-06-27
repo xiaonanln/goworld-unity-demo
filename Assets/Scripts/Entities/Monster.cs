@@ -65,4 +65,9 @@ public class Monster : ClientEntity {
     protected override void OnLeaveSpace()
     {
     }
+
+    public static new GameObject CreateGameObject(MapAttr attrs)
+    {
+        return GameObject.Instantiate(GameObject.Find("GoWorldController").GetComponent<GoWorldController>().ZomBunny);
+    }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using GoWorldUnity3D;
 
 public class GoWorldController : MonoBehaviour {
 
@@ -13,13 +14,12 @@ public class GoWorldController : MonoBehaviour {
 
     void Start () {
         GameObject.DontDestroyOnLoad(gameObject);
-
         Debug.Log("Register Entity Type Account ...");
-        GoWorldUnity3D.GoWorld.RegisterEntity(this.Account);
+        GoWorld.RegisterEntity(typeof(Account));
         Debug.Log("Register Entity Type Player ...");
-        GoWorldUnity3D.GoWorld.RegisterEntity(this.Player);
-        Debug.Log("Register Entity Type Monster ...");
-        GoWorldUnity3D.GoWorld.RegisterEntity(this.ZomBunny);
+        GoWorld.RegisterEntity(typeof(Player));
+        Debug.Log("Register Entity Type Monsters ...");
+        GoWorld.RegisterEntity(typeof(Monster));
         Debug.Log("Connecting Serer ...");
         GoWorldUnity3D.GoWorld.Connect("ec2-13-229-128-242.ap-southeast-1.compute.amazonaws.com", 15011);
     }

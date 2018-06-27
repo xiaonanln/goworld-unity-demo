@@ -68,28 +68,12 @@ namespace GoWorldUnity3D
 
         public static void Assert(bool condition)
         {
-            try
-            {
-                UnityEngine.Debug.Assert(condition);
-            }
-            catch (System.Security.SecurityException)
-            {
-                System.Diagnostics.Debug.Assert(condition);
-            }
-
+              System.Diagnostics.Debug.Assert(condition);
         }
 
         public static void Assert(bool condition, string format, params object[] args)
         {
-            try
-            {
-                UnityEngine.Debug.AssertFormat(condition, format, args);
-            }
-            catch (System.Security.SecurityException)
-            {
-                System.Diagnostics.Debug.Assert(condition, "Assert Error", format, args);
-            }
-            
+            UnityEngine.Debug.AssertFormat(condition, format, args);
         }
     }
 }

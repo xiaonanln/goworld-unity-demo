@@ -149,6 +149,10 @@ namespace GoWorldUnity3D
         protected abstract void OnEnterSpace();
         protected abstract void OnLeaveSpace();
         protected abstract void OnDestroy();
+        public static GameObject CreateGameObject(MapAttr attrs)
+        {
+            return null;
+        }
 
         virtual protected void OnUpdatePosition(Vector3 pos)
         {
