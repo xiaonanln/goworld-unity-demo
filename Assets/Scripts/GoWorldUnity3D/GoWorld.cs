@@ -34,10 +34,10 @@ namespace GoWorldUnity3D
             RegisterEntity(typeof(ClientSpace));
         }
 
-        public static void Update()
+        public static void Tick()
         {
-            GameClient.Update();
-            EntityManager.Update();
+            GameClient.Tick();
+            EntityManager.Tick();
         }
 
         public static void RegisterEntity(Type entityType)

@@ -53,4 +53,8 @@ public class Account : GoWorldUnity3D.ClientEntity{
     {
         return GameObject.Instantiate(GameObject.Find("GoWorldController").GetComponent<GoWorldController>().Account);
     }
+
+    protected override void Tick()
+    {
+    }
 }

@@ -91,7 +91,7 @@ namespace GoWorldUnity3D
             }
         }
 
-        internal void Update()
+        internal void Tick()
         {
             if (this.Host == "")
             {

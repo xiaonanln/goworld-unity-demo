@@ -149,6 +149,20 @@ namespace GoWorldUnity3D
         protected abstract void OnEnterSpace();
         protected abstract void OnLeaveSpace();
         protected abstract void OnDestroy();
+        protected abstract void Tick();
+
+        internal void tick()
+        {
+            try
+            {
+                this.Tick();
+            }
+            catch (Exception e)
+            {
+                GoWorldLogger.Error(this.ToString(), e.ToString());
+            }
+        }
+
         public static GameObject CreateGameObject(MapAttr attrs)
         {
             return null;

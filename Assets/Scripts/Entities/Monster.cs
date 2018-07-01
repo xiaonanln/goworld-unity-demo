@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using GoWorldUnity3D;
 
-public class Monster : ClientEntity {
+public class Monster : GameEntity {
 
 	Animator anim;
 	LineRenderer lineRenderer;
@@ -50,12 +50,6 @@ public class Monster : ClientEntity {
 			lineRenderer.enabled = false;
 		}
 	}
-
-    protected override void OnUpdatePosition(Vector3 pos)
-    {
-        base.OnUpdatePosition(pos);
-        Debug.Log("Monster is moving to " + pos);
-    }
 
     protected override void OnBecomeClientOwner()
     {

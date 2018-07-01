@@ -36,5 +36,9 @@ namespace GoWorldUnity3D
         {
             return new GameObject("ClientSpace", typeof(ClientSpace));
         }
+
+        protected override void Tick()
+        {
+        }
     }
 }

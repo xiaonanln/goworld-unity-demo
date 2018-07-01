@@ -95,11 +95,16 @@ namespace GoWorldUnity3D
             return e; 
         }
 
-        internal void Update()
+        internal void Tick()
         {
             if (this.ClientOwner != null)
             {
                 this.ClientOwner.syncPositionYawFromClient();
+            }
+            // Tick all entities
+            foreach (ClientEntity entity in this.entities.Values)
+            {
+                entity.tick();
             }
         }
 

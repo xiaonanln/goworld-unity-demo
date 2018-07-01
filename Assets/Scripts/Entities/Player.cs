@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 using GoWorldUnity3D;
 using System.Threading;
 
-public class Player : ClientEntity {
+public class Player : GameEntity {
 
 	Animator anim;
 	PlayerShooting playerShooting;
