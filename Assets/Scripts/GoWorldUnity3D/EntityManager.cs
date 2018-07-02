@@ -60,6 +60,8 @@ namespace GoWorldUnity3D
             GameObject.DontDestroyOnLoad(gameObject);
             e.init(entityID, isClientOwner, x, y, z, yaw, attrs);
             this.entities[entityID] = e;
+            gameObject.transform.position = e.Position;
+            gameObject.transform.rotation = Quaternion.Euler(new Vector3(0f, e.Yaw, 0f));
             e.onCreated();
 
             // new entity created 

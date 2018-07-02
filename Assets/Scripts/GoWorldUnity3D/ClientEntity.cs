@@ -37,7 +37,7 @@ namespace GoWorldUnity3D
                 this.yaw = value;
                 this.OnUpdateYaw(value);
             } }
-
+        
         private void debug(string msg, params object[] args)
         {
             Console.WriteLine(String.Format("DEBUG - "+this+" - " + msg, args));
