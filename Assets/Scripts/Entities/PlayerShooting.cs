@@ -4,7 +4,7 @@ using GoWorldUnity3D;
 public class PlayerShooting : MonoBehaviour
 {
     public int damagePerShot = 20;
-    public float timeBetweenBullets = 0.15f;
+    public float timeBetweenBullets = 0.5f;
     public float range = 100f;
 
 
